@@ -8,5 +8,8 @@ export default defineConfig({
   },
   html:{
     title:"管网编辑Demo"
+  },
+  output:{
+    assetPrefix:"/gas-pipeline-edit-demo/"
   }
 });

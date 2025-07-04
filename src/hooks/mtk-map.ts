@@ -69,7 +69,7 @@ export const useMtkMap = () => {
      * 初始化地图绘制工具
      * @param snap 地图绘制工具
      */
-    const initDraw = (snap: any,vtLayer:any) => {
+    const initDraw = (snap: any, vtLayer: any) => {
         const layer1 = new maptalks.VectorLayer('layer1').addTo(map);
 
         // map.on('mousemove', showDrawTip);
@@ -174,14 +174,14 @@ export const useMtkMap = () => {
         const switchAnimation = () => {
             if (enableAnimation) {
                 vtLayer.setStyle(normalStyle)
-                enableAnimation=false
+                enableAnimation = false
             } else {
                 vtLayer.setStyle(animationStyle)
-                enableAnimation=true
+                enableAnimation = true
             }
         }
 
-        var items = ['LineString','Polygon', 'Point'].map(function (value) {
+        var items = ['LineString', 'Polygon', 'Point'].map(function (value) {
             return {
                 item: value,
                 click: function () {
@@ -234,20 +234,21 @@ export const useMtkMap = () => {
             baseLayer: tileLayer
         });
 
-
-
-        const vtLayer = new maptalks.VectorTileLayer("streets", {
+        const testVtLayer = new maptalks.VectorTileLayer("streets", {
             urlTemplate: "http://127.0.0.1:8030/streets/{z}/{x}/{y}",
             features: true,
             pickingGeometry: true,
         });
 
-        vtLayer.setStyle(normalStyle)
+        const vtLayer = new maptalks.GeoJSONVectorTileLayer("streets", {
+            style:normalStyle,
+            // @ts-expect-error
+            features: true,
+            pickingGeometry: true,
+            data: './streets.geojson'
+        });
 
-        const groupLayer = new maptalks.GroupGLLayer("group", [vtLayer], {
-            sceneConfig: {
-            }
-        }).addTo(map);
+        const groupLayer = new maptalks.GroupGLLayer("group", [vtLayer], {}).addTo(map);
 
         const snap = new Snap(map);
 
@@ -279,7 +280,7 @@ export const useMtkMap = () => {
             }
         })
 
-        initDraw(snap,vtLayer)
+        initDraw(snap, vtLayer)
 
     }
 
@@ -287,7 +288,7 @@ export const useMtkMap = () => {
         initMap()
     })
 
-    onBeforeUnmount(()=>{
+    onBeforeUnmount(() => {
         map.remove()
     })
     // @ts-expect-error
