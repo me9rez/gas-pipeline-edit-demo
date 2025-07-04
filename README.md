@@ -44,3 +44,9 @@ pnpm install
 pnpm dev
 ```
 
+## TODO
+
+1. 使用[WFS](https://www.ogc.org/standards/wfs/)或[OGC API - Features](https://ogcapi.ogc.org/features/)标准实现数据编辑结果保存到数据库
+2. 在数据库或后端实现矢量瓦片diff更新功能
+3. 修改maptalks底层矢量瓦片更新逻辑
+
