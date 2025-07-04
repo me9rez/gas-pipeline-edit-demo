@@ -80,7 +80,7 @@ export const useMtkMap = () => {
                 id: feature.id,
                 plugin: 'streets-style',
                 name: highLightKey,
-                color: 'red'
+                color: 'blue'
             }]);
         }
 
