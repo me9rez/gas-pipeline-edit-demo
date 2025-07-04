@@ -19,3 +19,11 @@ const { map } = useMtkMap()
     height: 100vh;
 }
 </style>
+
+<style>
+.attr-window {
+    display: flex;
+    flex-direction: column;
+    gap: 6px
+}
+</style>

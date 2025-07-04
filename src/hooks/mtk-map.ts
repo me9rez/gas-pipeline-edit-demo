@@ -6,8 +6,20 @@ import * as maptalks from 'maptalks-gl'
 // @ts-expect-error
 import { Snap } from 'maptalks.snap'
 
+const lineWidth = {
+    type: "exponential",
+    default: 2,
+    stops: [
+        [13, 2],
+        [14, 2],
+        [16, 2],
+        [17, 2]
+    ]
+}
+
 const normalStyle = {
     style: [{
+        name:"streets-style",
         filter: ["all", ["==", "$type", "LineString"]],
         renderPlugin: {
             dataConfig: {
@@ -20,22 +32,15 @@ const normalStyle = {
             // linePatternAnimSpeed: -0.4,
             // linePatternFile: "/halo.png",
             lineColor: [0.1882352, 0.1882352, 0.1882352, 1],
-            lineWidth: {
-                type: "exponential",
-                default: 2,
-                stops: [
-                    [13, 2],
-                    [14, 2],
-                    [16, 2],
-                    [17, 2]
-                ]
-            }
+            lineWidth: lineWidth
         }
     }]
 }
 
 const animationStyle = {
-    style: [{
+    style: [
+        {
+        name:"streets-style",
         filter: ["all", ["==", "$type", "LineString"]],
         renderPlugin: {
             dataConfig: {
@@ -48,22 +53,72 @@ const animationStyle = {
             linePatternAnimSpeed: -0.4,
             linePatternFile: "/halo.png",
             lineColor: [0.1882352, 0.1882352, 0.1882352, 1],
-            lineWidth: {
-                type: "exponential",
-                default: 2,
-                stops: [
-                    [13, 2],
-                    [14, 2],
-                    [16, 2],
-                    [17, 2]
-                ]
-            }
+            lineWidth: lineWidth
         }
-    }]
+    }
+]
 };
 
 export const useMtkMap = () => {
     let map: maptalks.Map
+
+    const initHighLight = (map: any, layer: any) => {
+        const highLightKey = 'streets-color';
+
+        var options: any = {
+            'title': 'InfoWindow',
+            'content': '',
+            'width': 180,
+            'minHeight': 120,
+            'autoOpenOn': null, //set to null if not to open window when clicking on map
+        };
+        var infoWindow = new maptalks.ui.InfoWindow(options);
+        infoWindow.addTo(map);
+
+        function highLight(feature: any, layer: maptalks.GeoJSONVectorTileLayer) {
+            layer.highlight([{
+                id: feature.id,
+                plugin: 'streets-style',
+                name: highLightKey,
+                color: 'red'
+            }]);
+        }
+
+        function cancel(layer: any) {
+            layer.cancelHighlight([highLightKey]);
+        }
+
+        function showInfoWindow(coordinate: any, feature: any) {
+            // infoWindow.setTitle('....');
+            // infoWindow.setContent(`<div class="loading"><img src="/resources/images/loading.gif"/></div>`);
+            infoWindow.show(coordinate);
+
+            infoWindow.setContent(
+                `
+                <div class="attr-window">
+                <div>ID:${feature.properties.ID}</div>
+                <div>NAME:${feature.properties.NAME}</div>
+                <div>ONEWAY:${feature.properties.ONEWAY}</div>
+                <div>TYPE:${feature.properties.TYPE}</div>
+                </div>
+                `
+            );
+            infoWindow.setTitle('要素属性');
+        }
+
+        map.on('click', (e: any) => {
+            const data = layer.identify(e.coordinate);
+            if (!data || !data.length) {
+                cancel(layer);
+                infoWindow.hide();
+                return;
+            }
+            const feature = data[data.length - 1].data.feature;
+            highLight(feature, layer);
+            showInfoWindow(e.coordinate, feature);
+            console.log(feature);
+        })
+    }
 
     /**
      * 初始化地图绘制工具
@@ -157,7 +212,7 @@ export const useMtkMap = () => {
             }
             if (mode === 'point') {
                 geometry.setSymbol({
-                    markerFile: './poi.png'
+                    markerFile: '/poi.png'
                     // polygonFill: "white",
                     // lineColor: 'blue',
                     // markerType: 'ellipse',
@@ -214,6 +269,12 @@ export const useMtkMap = () => {
                     click: () => {
                         switchAnimation()
                     }
+                },
+                {
+                    item: "项目源码",
+                    click: () => {
+                        window.open('https://github.com/me9rez/gas-pipeline-edit-demo')
+                    }
                 }
             ]
         }).addTo(map);
@@ -241,7 +302,7 @@ export const useMtkMap = () => {
         });
 
         const vtLayer = new maptalks.GeoJSONVectorTileLayer("streets", {
-            style:normalStyle,
+            style: normalStyle,
             // @ts-expect-error
             features: true,
             pickingGeometry: true,
@@ -281,6 +342,7 @@ export const useMtkMap = () => {
         })
 
         initDraw(snap, vtLayer)
+        initHighLight(map, vtLayer)
 
     }
 
