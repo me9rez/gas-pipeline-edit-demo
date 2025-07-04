@@ -1,5 +1,7 @@
 import { ref, onMounted, onBeforeUnmount } from 'vue'
 import type { Ref, ShallowRef } from 'vue'
+import halo from '../assets/halo.png'
+import poi from '../assets/poi.png'
 
 import "maptalks-gl/dist/maptalks-gl.css"
 import * as maptalks from 'maptalks-gl'
@@ -51,7 +53,7 @@ const animationStyle = {
         },
         symbol: {
             linePatternAnimSpeed: -0.4,
-            linePatternFile: "/halo.png",
+            linePatternFile: halo,
             lineColor: [0.1882352, 0.1882352, 0.1882352, 1],
             lineWidth: lineWidth
         }
@@ -212,7 +214,7 @@ export const useMtkMap = () => {
             }
             if (mode === 'point') {
                 geometry.setSymbol({
-                    markerFile: '/poi.png'
+                    markerFile: poi
                     // polygonFill: "white",
                     // lineColor: 'blue',
                     // markerType: 'ellipse',
