@@ -4,6 +4,11 @@ settings:
   autoInstallPeers: true
   excludeLinksFromLockfile: false
 
+patchedDependencies:
+  maptalks.snap:
+    hash: 81cf136cf00f60300cfa165640060ca38018041462bb1c00a61c9dd4977f07e3
+    path: patches/maptalks.snap.patch
+
 importers:
 
   .:
@@ -13,7 +18,7 @@ importers:
         version: 0.109.0
       maptalks.snap:
         specifier: ^0.4.4
-        version: 0.4.4
+        version: 0.4.4(patch_hash=81cf136cf00f60300cfa165640060ca38018041462bb1c00a61c9dd4977f07e3)
       ol:
         specifier: ^10.6.1
         version: 10.6.1
@@ -1381,7 +1386,7 @@ snapshots:
       '@maptalks/vt': 0.106.2
       maptalks: 1.1.3
 
-  maptalks.snap@0.4.4: {}
+  maptalks.snap@0.4.4(patch_hash=81cf136cf00f60300cfa165640060ca38018041462bb1c00a61c9dd4977f07e3): {}
 
   maptalks@1.1.3:
     dependencies:

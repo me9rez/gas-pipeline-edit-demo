@@ -1,0 +1,13 @@
+diff --git a/index.js b/index.js
+index 16add00da6090f29b311d68c8a479b003c06bca7..688f39f07a534354bc698aa7b71b23bbe913ede5 100644
+--- a/index.js
++++ b/index.js
+@@ -152,7 +152,7 @@ export class Snap extends maptalks.Eventable(maptalks.Class) {
+                 geometries = filterGeometries();
+             }
+             if (!geometries || !geometries.length) {
+-                const layer = this.getLayer();
++                const layer = geometry.getLayer();
+                 if (layer) {
+                     geometries = layer.getGeometries();
+                 }
