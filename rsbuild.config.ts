@@ -6,10 +6,14 @@ export default defineConfig({
   server: {
     port: 8098
   },
-  html:{
-    title:"管网编辑Demo"
+  html: {
+    title: "管网编辑Demo"
   },
-  output:{
-    assetPrefix:"/gas-pipeline-edit-demo/"
+  output: {
+    assetPrefix: "/gas-pipeline-edit-demo/",
+
+  },
+  performance: {
+    removeConsole: true
   }
 });
